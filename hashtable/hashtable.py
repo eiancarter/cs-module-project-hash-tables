@@ -1,3 +1,5 @@
+from hashtable import linked_list
+
 class HashTableEntry:
     """
     Linked List hash table key/value pair
@@ -6,7 +8,6 @@ class HashTableEntry:
         self.key = key
         self.value = value
         self.next = None
-
 
 # Hash table can't have fewer than this many slots
 MIN_CAPACITY = 8
@@ -22,6 +23,7 @@ class HashTable:
 
     def __init__(self, capacity):
         # Your code here
+        self.capacity = [None] * MIN_CAPACITY
 
 
     def get_num_slots(self):
@@ -54,7 +56,15 @@ class HashTable:
         """
 
         # Your code here
-
+        hval = 0x0811c9dc5
+        fnvprime = 0x01000193
+        fnvsize =  2**32
+        if not isinstance(key, bytes):
+            key = key.encode("UTF-8", "ignore")
+        for byte in key:
+            hval = (hval * fnvprime) % fnvsize
+            hval = hval ^ byte
+        return hval
 
     def djb2(self, key):
         """
@@ -63,6 +73,10 @@ class HashTable:
         Implement this, and/or FNV-1.
         """
         # Your code here
+        hash = 5381
+        for byte in key:
+            hash = ((hash << 5) + hash) + ord(byte)
+            return hash & 0xFFFFFFFF
 
 
     def hash_index(self, key):
@@ -70,8 +84,9 @@ class HashTable:
         Take an arbitrary key and return a valid integer index
         between within the storage capacity of the hash table.
         """
-        #return self.fnv1(key) % self.capacity
-        return self.djb2(key) % self.capacity
+        #return self.fnv1(key) % len(self.capacity)
+        hash_val = self.djb2(key)
+        return hash_val % len(self.capacity)
 
     def put(self, key, value):
         """
@@ -82,7 +97,8 @@ class HashTable:
         Implement this.
         """
         # Your code here
-
+        insert = self.hash_index(key)
+        self.capacity[insert] = HashTableEntry(key, value)
 
     def delete(self, key):
         """
@@ -93,6 +109,21 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        # self.put(key, None)
+        curr = self.keys
+        if curr.value == value:
+            self.key == self.key.next
+            return curr
+            prev = curr
+            curr = curr.next
+        while curr is not None:
+            if curr.value == value:
+                prev.next = curr.next
+                return curr
+            else:
+                prev = prev.next
+                curr = curr.next
+            return None
 
 
     def get(self, key):
@@ -104,7 +135,18 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        insert = self.hash_index(key)
+        val = self.capacity[insert]
+        # if val is not None:
+        #     return val.value
+        # else: 
+        #     return None
 
+        while val is not None:
+            if val.value == value:
+                return val
+            val = val.next
+        return None
 
     def resize(self, new_capacity):
         """
