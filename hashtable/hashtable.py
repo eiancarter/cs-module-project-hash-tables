@@ -24,6 +24,7 @@ class HashTable:
     def __init__(self, capacity):
         # Your code here
         self.capacity = [None] * MIN_CAPACITY
+        self.items = 0
 
 
     def get_num_slots(self):
@@ -37,6 +38,7 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        return self.capacity
 
 
     def get_load_factor(self):
@@ -44,8 +46,19 @@ class HashTable:
         Return the load factor for this hash table.
 
         Implement this.
+        number of things stored in the hash table / number of slots in the array
+        When computing the load, keep track of the number of items in the hash table as
+        you go.
+        * When you put a new item in the hash table, increment the count
+        * When you delete an item from the hash table, decrement the count
+        When is the hash table overloaded?
+        * It's overloaded when load factor > 0.7
+        * It's underloaded when load factor < 0.2 (Stretch)
+
         """
         # Your code here
+
+        return self.items.length / self.capacity 
 
 
     def fnv1(self, key):
@@ -99,6 +112,7 @@ class HashTable:
         # Your code here
         insert = self.hash_index(key)
         self.capacity[insert] = HashTableEntry(key, value)
+        self.items += 1
 
     def delete(self, key):
         """
@@ -110,12 +124,13 @@ class HashTable:
         """
         # Your code here
         # self.put(key, None)
-        curr = self.keys
+        curr = self.hash_index(key)
         if curr.value == value:
             self.key == self.key.next
             return curr
-            prev = curr
-            curr = curr.next
+        prev = curr
+        curr = curr.next
+
         while curr is not None:
             if curr.value == value:
                 prev.next = curr.next
