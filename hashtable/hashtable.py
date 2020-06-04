@@ -1,5 +1,3 @@
-from hashtable import linked_list
-
 class HashTableEntry:
     """
     Linked List hash table key/value pair
@@ -112,7 +110,7 @@ class HashTable:
         # Your code here
         insert = self.hash_index(key)
         self.capacity[insert] = HashTableEntry(key, value)
-        self.items += 1
+        # self.items += 1
 
     def delete(self, key):
         """

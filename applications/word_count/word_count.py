@@ -1,5 +1,16 @@
 def word_count(s):
     # Your code here
+    # s.split(' ')
+    new_str_list = s.split(' ')
+    print(new_str_list)
+    counts = dict()
+    for str in new_str_list:
+        if str not in counts:
+            counts[str] = 1
+        else:
+            counts[str] += 1
+    return counts
+
 
 
 
